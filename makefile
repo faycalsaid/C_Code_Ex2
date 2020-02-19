@@ -30,8 +30,14 @@ build/$(OS_NAME):
 build/$(OS_NAME)/ROT13.o: lib/ROT13.c | build/$(OS_NAME)
 	$(cc) -Wall -pedantic -g -c lib/ROT13.c -I ./lib -o build/$(OS_NAME)/ROT13.o
 
-build/$(OS_NAME)/libchiffrage.a: build/$(OS_NAME)/ROT13.o | build/$(OS_NAME)
-	ar crs build/$(OS_NAME)/libchiffrage.a build/$(OS_NAME)/ROT13.o
+build/$(OS_NAME)/Cesar.o: lib/Cesar.c | build/$(OS_NAME)
+	$(cc) -Wall -pedantic -g -c lib/Cesar.c -I ./lib -o build/$(OS_NAME)/Cesar.o
+
+build/$(OS_NAME)/Vigenere.o: lib/Vigenere.c | build/$(OS_NAME)
+	$(cc) -Wall -pedantic -g -c lib/Vigenere.c -I ./lib -o build/$(OS_NAME)/Vigenere.o
+
+build/$(OS_NAME)/libchiffrage.a: build/$(OS_NAME)/ROT13.o build/$(OS_NAME)/Cesar.o build/$(OS_NAME)/Vigenere.o  | build/$(OS_NAME)
+	ar crs build/$(OS_NAME)/libchiffrage.a build/$(OS_NAME)/ROT13.o build/$(OS_NAME)/Cesar.o build/$(OS_NAME)/Vigenere.o
 
 # Programme de test. Trois cibles, une pour compiler le code de test en fichier objet, une pour lier le fichier objet avec 
 # la bibliothèque statique de chiffrage et une dernière de "commodité" pour faire plus court à l'invite de commandes.
@@ -39,6 +45,6 @@ build/$(OS_NAME)/test.o: test/main.c | build/$(OS_NAME)
 	$(cc) -Wall -pedantic -g -c test/main.c -I ./lib -o build/$(OS_NAME)/test.o
 
 build/$(OS_NAME)/test: build/$(OS_NAME)/test.o build/$(OS_NAME)/libchiffrage.a | build/$(OS_NAME)
-	$(cc) build/$(OS_NAME)/test.o -Lbuild/$(OS_NAME) -lchiffrage -o build/$(OS_NAME)/test
+	$(cc) build/$(OS_NAME)/test.o -L build/$(OS_NAME) -lchiffrage -o build/$(OS_NAME)/test
 
 test: build/$(OS_NAME)/test
