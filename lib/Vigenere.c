@@ -56,11 +56,65 @@ char* dechiffre_Vigenere(char* chiffre, char const* cle)
 
 void chiffre_Vigenere_flux_texte(FILE* chiffre, FILE* clair, char const* cle)
 {
+    char* readChar =NULL;
+    int size = 0;
+
+    if (clair)
+	{   // File Size
+		fseek(clair, 0L, SEEK_END);
+		size = ftell(clair);
+		rewind(clair);
+
+		readChar = (char *)malloc((size + 1) * sizeof(char));
+
+		//Char read one by one
+		for (int i = 0; i < size; i++)
+		{
+			readChar[i] = (char)fgetc(clair); 
+		}													
+		readChar[size] = '\0';
+
+		fclose(clair);
+	}else{
+		printf("Error File Reading\n");
+	}
+
+    readChar = chiffre_Vigenere(readChar,cle);
+    fwrite(readChar, sizeof(char), size, chiffre);
+    fclose(chiffre);
+
+
     return;
 }
 
 void dechiffre_Vigenere_flux_texte(FILE* clair, FILE* chiffre, char const* cle)
-{
+{   
+    char* readChar =NULL;
+    int size = 0;
+
+    if (chiffre)
+	{   // File Size
+		fseek(chiffre, 0L, SEEK_END);
+		size = ftell(chiffre);
+		rewind(chiffre);
+
+		readChar = (char *)malloc((size + 1) * sizeof(char));
+
+		//Char read one by one
+		for (int i = 0; i < size; i++)
+		{
+			readChar[i] = (char)fgetc(chiffre);
+		}												
+		readChar[size] = '\0';
+
+		fclose(chiffre);
+	}else{
+		printf("Error Reading File\n");
+	}
+
+    readChar = dechiffre_Vigenere(readChar,cle);
+    fwrite(readChar, sizeof(char), size, clair);
+    fclose(clair);
     return;
 }
 
@@ -73,3 +127,4 @@ void dechiffre_Vigenere_flux_binaire(FILE* clair, FILE* chiffre, char const* cle
 {
     return;
 }
+
