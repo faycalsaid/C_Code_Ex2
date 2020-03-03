@@ -74,14 +74,12 @@ void chiffre_Vigenere_flux_texte(FILE* chiffre, FILE* clair, char const* cle)
 		}													
 		readChar[size] = '\0';
 
-		fclose(clair);
 	}else{
 		printf("Error File Reading\n");
 	}
 
     readChar = chiffre_Vigenere(readChar,cle);
     fwrite(readChar, sizeof(char), size, chiffre);
-    fclose(chiffre);
 
 
     return;
@@ -107,14 +105,12 @@ void dechiffre_Vigenere_flux_texte(FILE* clair, FILE* chiffre, char const* cle)
 		}												
 		readChar[size] = '\0';
 
-		fclose(chiffre);
 	}else{
 		printf("Error Reading File\n");
 	}
 
     readChar = dechiffre_Vigenere(readChar,cle);
     fwrite(readChar, sizeof(char), size, clair);
-    fclose(clair);
     return;
 }
 
